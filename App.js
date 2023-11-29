@@ -1,12 +1,97 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TextInput, Button, Switch} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TextInput, Button, Switch, FlatList, BackHandler, Alert} from 'react-native';
 
 //BASIC Components::
 
 export default function App() {
   const [name, setName] = useState('')
   const [isEnabled, setIsEnabled] = useState(false)
+
+  //THIS IS FOR FLAT LIST COMPONENT :::::
+
+  const [items, setItem] = useState([
+    {name: 'pen', key: 1},
+    {name: 'pencil', key: 2},
+    {name: 'Earser', key: 3},
+    {name: 'Red pen', key: 4},
+    {name: 'Blue pen', key: 5},
+    {name: 'Black pen', key: 6},
+    {name: 'Gel pen', key: 7},
+    {name: 'Green pen', key: 8},
+    {name: 'Brown pen', key: 9},
+  ])
+
+
+// SHOWING ALERT MESSAGE WHILE PRESSING BACK BUTTON ::::::
+
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to exit?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+
+// WITHOUT SHOWING ALERT MESSAGE EXIT FROM THE APP:::::
+
+//   useEffect(() => {
+//   const backHandler = BackHandler.addEventListener(
+//     'hardwareBackPress',
+//     () => {
+//       BackHandler.exitApp(); 
+//       return true; 
+//     }
+//   );
+
+//   return () => backHandler.remove();
+// }, []);
+
+
+//   useEffect(() => {
+//   const backAction = () => {
+//     Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+//       {
+//         text: 'Cancel',
+//         onPress: () => null,
+//         style: 'cancel',
+//       },
+//       { text: 'YES', onPress: () => handleBackAction() },
+//     ]);
+//     return true;
+//   };
+
+//   const handleBackAction = () => {
+//     if (BackHandler) {
+//       BackHandler.exitApp(); // Exit the app if supported
+//     } else {
+//       console.log("Back Button is not available")
+//     }
+//   };
+
+//   const backHandler = BackHandler.addEventListener(
+//     'hardwareBackPress',
+//     backAction
+//   );
+
+//   return () => backHandler.remove();
+// }, []);
+
 
   const eventHandlder = (text) =>{
     setName(text)
@@ -77,11 +162,19 @@ export default function App() {
           based on the trees around him. Each tiger marks the trees in its area 
           with urine and special scratches.
         </Text>
-
       <StatusBar style="auto" />
       </ScrollView>
 
     </View>
+    // <View style={styles.container}>
+    //   <FlatList
+    //     data={items}
+    //     renderItem={({item}) => (
+    //       <Text style={styles.itemName}>{item.name}</Text>
+    //     )}
+    //   />
+    // </View>
+
   );
 }
 
@@ -131,5 +224,58 @@ const styles = StyleSheet.create({
   },
   button:{
     borderColor:"red"
+  },
+  itemName:{
+    color: 'black',
+    backgroundColor: 'green',
+    margin: 20,
+    height: 50,
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    padding: 10
   }
 });
+
+//  export const App = () => {
+//   useEffect(() => {
+//     const backAction = () => {
+//       Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+//         {
+//           text: 'Cancel',
+//           onPress: () => null,
+//           style: 'cancel',
+//         },
+//         {text: 'YES', onPress: () => BackHandler.exitApp()},
+//       ]);
+//       return true;
+//     };
+
+//     const backHandler = BackHandler.addEventListener(
+//       'hardwareBackPress',
+//       backAction,
+//     );
+
+//     return () => backHandler.remove();
+//   }, []);
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.text}>Click Back button!</Text>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   text: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+// });
+
+// export default App;
